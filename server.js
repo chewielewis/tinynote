@@ -11,15 +11,24 @@ dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const printer = new TinyNote('10.1.1.30', 9100);
 
-// OpenRouter API
-const OPENROUTER_API_KEY = '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';
-const OPENROUTER_MODEL = 'anthropic/claude-3.5-sonnet';
+// Validate required environment variables
+if (!process.env.OPENROUTER_API_KEY) {
+  console.error('❌ OPENROUTER_API_KEY environment variable is required');
+  process.exit(1);
+}
+
+// Configuration from environment variables with defaults
+const PRINTER_IP = process.env.PRINTER_IP || '10.1.1.30';
+const PRINTER_PORT = parseInt(process.env.PRINTER_PORT) || 9100;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'anthropic/claude-3.5-sonnet';
+const MIN_PRINT_INTERVAL = parseInt(process.env.MIN_PRINT_INTERVAL_MS) || 3000;
+
+const printer = new TinyNote(PRINTER_IP, PRINTER_PORT);
 
 // Rate limiting to prevent overwhelming the printer
 let lastPrintTime = 0;
-const MIN_PRINT_INTERVAL = 3000; // 3 seconds between prints
 
 // Prompt queue file
 const PROMPTS_FILE = path.join(__dirname, 'prompts.json');
@@ -266,5 +275,7 @@ app.delete('/prompts/:id', (req, res) => {
 const PORT = process.env.PORT || 4444;
 app.listen(PORT, () => {
   console.log(`\n🖨️  TinyNote server running at http://localhost:${PORT}`);
-  console.log(`📄 Printer: 10.1.1.30:9100`);
+  console.log(`📄 Printer: ${PRINTER_IP}:${PRINTER_PORT}`);
+  console.log(`🤖 AI Model: ${OPENROUTER_MODEL}`);
+  console.log(`⏱️  Min Print Interval: ${MIN_PRINT_INTERVAL}ms`);
 });

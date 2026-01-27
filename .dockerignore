@@ -1,0 +1,48 @@
+# Node modules (will be installed in container)
+node_modules
+npm-debug.log
+
+# Environment files (secrets)
+.env
+.env.local
+.env.*.local
+
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Test files
+test.js
+*.test.js
+tests/
+
+# Documentation
+README.md
+CLAUDE.md
+.dockerignore
+Dockerfile
+docker-compose.yml
+unraid-template.xml
+
+# Data files (persisted via volume)
+prompts.json
+data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist
+build

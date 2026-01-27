@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  tinynote:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tinynote:latest
+    container_name: tinynote
+
+    # Host network mode (RECOMMENDED for Unraid)
+    # Allows easy access to printer on local network
+    # Comment out 'network_mode: host' and uncomment 'ports' for bridge mode
+    network_mode: host
+
+    # Alternative: Bridge network mode (advanced)
+    # ports:
+    #   - "4444:4444"
+
+    environment:
+      # Server configuration
+      - PORT=4444
+
+      # Printer configuration
+      - PRINTER_IP=10.1.1.30
+      - PRINTER_PORT=9100
+
+      # OpenRouter API (REQUIRED)
+      # Get your key at: https://openrouter.ai/
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+
+      # AI Model configuration
+      - OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+      - PERPLEXITY_MODEL=perplexity/sonar-small-online
+
+      # Performance tuning
+      - MIN_PRINT_INTERVAL_MS=3000
+      - SEARCH_TIMEOUT_MS=10000
+      - CACHE_TTL_MS=300000
+
+    # Persist prompts.json across container restarts
+    volumes:
+      - ./data:/app/data
+
+    # Auto-restart policy
+    restart: unless-stopped
+
+    # Optional: Health check
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4444', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+    # Optional: Logging configuration
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
+
+  # Alternative service using bridge network mode
+  # Uncomment to use instead of main service
+  # tinynote-bridge:
+  #   extends: tinynote
+  #   container_name: tinynote-bridge
+  #   network_mode: bridge
+  #   ports:
+  #     - "4444:4444"
+  #   # Note: With bridge mode, ensure PRINTER_IP is accessible from container

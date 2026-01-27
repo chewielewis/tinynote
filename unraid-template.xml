@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>tinynote</Name>
+  <Repository>tinynote:latest</Repository>
+  <Registry>https://openrouter.ai/</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/yourusername/tinynote/issues</Support>
+  <Project>https://github.com/yourusername/tinynote</Project>
+  <Overview>TinyNote is a web-based thermal printer service for Epson TM-T30 printers with AI-powered content generation. Uses OpenRouter/Claude for content creation and optional web search via Perplexity models.</Overview>
+  <Category>Productivity: Utilities:</Category>
+  <WebUI>http://[IP]:[PORT:4444]/</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/yourusername/tinynote/main/public/icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1737600000</DateInstalled>
+
+  <!-- Environment Variables -->
+  <Config Name="Web UI Port" Target="PORT" Default="4444" Mode="" Description="Container Port: 4444" Type="Variable" Display="always" Required="false" Mask="false">4444</Config>
+
+  <Config Name="Printer IP Address" Target="PRINTER_IP" Default="10.1.1.30" Mode="" Description="IP address of your Epson TM-T30 printer" Type="Variable" Display="always" Required="false" Mask="false">10.1.1.30</Config>
+
+  <Config Name="Printer Port" Target="PRINTER_PORT" Default="9100" Mode="" Description="Port for the printer (default: 9100)" Type="Variable" Display="advanced" Required="false" Mask="false">9100</Config>
+
+  <Config Name="OpenRouter API Key" Target="OPENROUTER_API_KEY" Default="" Mode="" Description="REQUIRED: Your OpenRouter API key from https://openrouter.ai/" Type="Variable" Display="always" Required="true" Mask="true">sk-or-v1-</Config>
+
+  <Config Name="AI Model" Target="OPENROUTER_MODEL" Default="anthropic/claude-3.5-sonnet" Mode="" Description="Model for content generation" Type="Variable" Display="advanced" Required="false" Mask="false">anthropic/claude-3.5-sonnet</Config>
+
+  <Config Name="Perplexity Model" Target="PERPLEXITY_MODEL" Default="perplexity/sonar-small-online" Mode="" Description="Model for web search" Type="Variable" Display="advanced" Required="false" Mask="false">perplexity/sonar-small-online</Config>
+
+  <Config Name="Min Print Interval (ms)" Target="MIN_PRINT_INTERVAL_MS" Default="3000" Mode="" Description="Minimum time between prints in milliseconds" Type="Variable" Display="advanced" Required="false" Mask="false">3000</Config>
+
+  <Config Name="Search Timeout (ms)" Target="SEARCH_TIMEOUT_MS" Default="10000" Mode="" Description="Web search timeout in milliseconds" Type="Variable" Display="advanced" Required="false" Mask="false">10000</Config>
+
+  <Config Name="Cache TTL (ms)" Target="CACHE_TTL_MS" Default="300000" Mode="" Description="Search cache duration in milliseconds" Type="Variable" Display="advanced" Required="false" Mask="false">300000</Config>
+
+  <!-- Volume Mappings -->
+  <Config Name="AppData" Target="/app/data" Default="/mnt/user/appdata/tinynote/data" Mode="rw" Description="Container Path: /app/data" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/tinynote/data</Config>
+
+  <!-- Port Mapping (only used if not using host network) -->
+  <Config Name="Port" Target="4444" Default="4444" Mode="tcp" Description="Container Port: 4444" Type="Port" Display="advanced-hide" Required="false">4444</Config>
+</Container>

@@ -3,8 +3,10 @@
  * Uses OpenRouter's Perplexity models with built-in web search
  */
 
-const SEARCH_TIMEOUT = 10000; // 10 seconds (web search models can be slower)
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+// Configuration from environment variables with defaults
+const SEARCH_TIMEOUT = parseInt(process.env.SEARCH_TIMEOUT_MS) || 10000; // 10 seconds (web search models can be slower)
+const CACHE_TTL = parseInt(process.env.CACHE_TTL_MS) || (5 * 60 * 1000); // 5 minutes in milliseconds
+const PERPLEXITY_MODEL = process.env.PERPLEXITY_MODEL || 'perplexity/sonar-small-online';
 
 // In-memory cache to avoid duplicate searches
 const searchCache = new Map();
@@ -19,7 +21,7 @@ const searchCache = new Map();
  * @returns {Promise<object>} Search results with answer
  */
 export async function performSearch(query, options = {}) {
-  const { apiKey, model = 'perplexity/sonar-small-online', timeout = SEARCH_TIMEOUT } = options;
+  const { apiKey, model = PERPLEXITY_MODEL, timeout = SEARCH_TIMEOUT } = options;
 
   // Check cache first
   const cached = getCachedResult(query);
