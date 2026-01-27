@@ -13,7 +13,7 @@
   <Category>Productivity: Utilities:</Category>
   <WebUI>http://[IP]:[PORT:4444]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/chewielewis/tinynote/main/unraid-template.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/chewielewis/tinynote/main/public/icon.png</Icon>
+  <Icon/>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>
