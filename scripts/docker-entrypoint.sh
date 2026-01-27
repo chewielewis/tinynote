@@ -31,13 +31,20 @@ if [ ! -d "/app/data" ]; then
   mkdir -p /app/data
 fi
 
-# Initialize prompts.json if it doesn't exist
+# Initialize prompts.json if it doesn't exist (and we can write)
 if [ ! -f "/app/data/prompts.json" ]; then
   echo "📄 Initializing prompts.json..."
-  echo '[]' > /app/data/prompts.json
+  # Try to create prompts.json, fail gracefully if we can't write
+  if echo '[]' > /app/data/prompts.json 2>/dev/null; then
+    echo "✅ prompts.json created"
+  else
+    echo "⚠️  Could not create prompts.json (permission denied)"
+    echo "   The application will create it when needed"
+    # Make sure the server.js can handle missing prompts.json
+  fi
 fi
 
-# Ensure proper permissions
+# Ensure proper permissions (only if we're root)
 if [ "$(id -u)" = "0" ]; then
   # If running as root, fix permissions for tinynote user
   chown -R tinynote:nodejs /app/data 2>/dev/null || true

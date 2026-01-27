@@ -82,7 +82,8 @@ ENV PORT=4444 \
     PERPLEXITY_MODEL=perplexity/sonar-small-online \
     MIN_PRINT_INTERVAL_MS=3000 \
     SEARCH_TIMEOUT_MS=10000 \
-    CACHE_TTL_MS=300000
+    CACHE_TTL_MS=300000 \
+    PROMPTS_FILE=/app/data/prompts.json
 
 # Make entrypoint script executable
 RUN chmod +x /app/scripts/docker-entrypoint.sh

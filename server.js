@@ -30,12 +30,17 @@ const printer = new TinyNote(PRINTER_IP, PRINTER_PORT);
 // Rate limiting to prevent overwhelming the printer
 let lastPrintTime = 0;
 
-// Prompt queue file
-const PROMPTS_FILE = path.join(__dirname, 'prompts.json');
+// Prompt queue file (use /app/data for persistence in Docker)
+const PROMPTS_FILE = process.env.PROMPTS_FILE || path.join(__dirname, 'prompts.json');
 
-// Initialize prompts file if it doesn't exist
+// Initialize prompts file if it doesn't exist (with error handling)
 if (!fs.existsSync(PROMPTS_FILE)) {
-  fs.writeFileSync(PROMPTS_FILE, JSON.stringify([], null, 2));
+  try {
+    fs.writeFileSync(PROMPTS_FILE, JSON.stringify([], null, 2));
+  } catch (error) {
+    console.warn('⚠️  Could not create prompts.json:', error.message);
+    console.warn('   Prompt queue feature will be disabled');
+  }
 }
 
 /**
@@ -244,6 +249,9 @@ app.post('/prompt', async (req, res) => {
 // Get pending prompts
 app.get('/prompts', (req, res) => {
   try {
+    if (!fs.existsSync(PROMPTS_FILE)) {
+      return res.json({ prompts: [] });
+    }
     const prompts = JSON.parse(fs.readFileSync(PROMPTS_FILE, 'utf8'));
     const pending = prompts.filter(p => p.status === 'pending');
     res.json({ prompts: pending });
@@ -255,6 +263,10 @@ app.get('/prompts', (req, res) => {
 // Mark prompt as completed
 app.delete('/prompts/:id', (req, res) => {
   try {
+    if (!fs.existsSync(PROMPTS_FILE)) {
+      return res.status(404).json({ error: 'Prompts file not found' });
+    }
+
     const { id } = req.params;
     const prompts = JSON.parse(fs.readFileSync(PROMPTS_FILE, 'utf8'));
 
