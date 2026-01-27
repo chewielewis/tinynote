@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyNote - Thermal Printer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🖨️ TinyNote</h1>
+      <p>Print to your Epson TM-T30</p>
+    </header>
+
+    <main>
+      <form id="form">
+        <div class="form-group">
+          <label for="input">What to print:</label>
+          <textarea
+            id="input"
+            name="input"
+            rows="6"
+            placeholder="Type your message or describe what you want to create..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label for="mode">Mode:</label>
+            <select id="mode" name="mode">
+              <option value="plain">Plain text</option>
+              <option value="ai">AI generates</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="align">Alignment:</label>
+            <select id="align" name="align">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn">
+          🖨️ Print
+        </button>
+
+        <div id="status" class="status"></div>
+      </form>
+    </main>
+
+    <footer>
+      <p>Printer at 10.1.1.30:9100</p>
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const submitBtn = document.getElementById('submitBtn');
+    const status = document.getElementById('status');
+    const modeSelect = document.getElementById('mode');
+    const inputField = document.getElementById('input');
+
+    // Update placeholder based on mode
+    modeSelect.addEventListener('change', () => {
+      if (modeSelect.value === 'plain') {
+        inputField.placeholder = 'Type your message here...';
+      } else {
+        inputField.placeholder = 'Describe what you want to create (e.g., "print a todo list", "make a receipt")...';
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const input = inputField.value;
+      const mode = modeSelect.value;
+      const align = document.getElementById('align').value;
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ Printing...';
+      status.className = 'status info';
+      status.textContent = mode === 'plain'
+        ? 'Sending to printer...'
+        : 'Generating and printing...';
+
+      try {
+        const endpoint = mode === 'plain' ? '/print' : '/prompt';
+        const body = mode === 'plain'
+          ? { message: input, align }
+          : { prompt: input };
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          status.className = 'status success';
+          status.textContent = '✓ Printed successfully!';
+          inputField.value = '';
+
+          setTimeout(() => {
+            status.textContent = '';
+          }, 3000);
+        } else {
+          throw new Error(data.error || 'Print failed');
+        }
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = `✗ Error: ${error.message}`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🖨️ Print';
+      }
+    });
+  </script>
+</body>
+</html>

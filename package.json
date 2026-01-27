@@ -1,0 +1,26 @@
+{
+  "name": "tinynote",
+  "version": "1.0.0",
+  "description": "Thermal printer utility for Epson TM-T30",
+  "main": "printer.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "thermal",
+    "printer",
+    "epson",
+    "escpos"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^3.2.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jimp": "^1.6.0",
+    "node-fetch": "^3.3.2"
+  }
+}
