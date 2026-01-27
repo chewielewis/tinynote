@@ -2,10 +2,14 @@ version: '3.8'
 
 services:
   tinynote:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: tinynote:latest
+    # Use pre-built image from GitHub Container Registry
+    image: ghcr.io/chewielewis/tinynote:latest
+
+    # For local development, uncomment to build from source:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+
     container_name: tinynote
 
     # Host network mode (RECOMMENDED for Unraid)

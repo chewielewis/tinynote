@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>tinynote</Name>
-  <Repository>tinynote:latest</Repository>
-  <Registry>https://openrouter.ai/</Registry>
+  <Repository>ghcr.io/chewielewis/tinynote:latest</Repository>
+  <Registry>https://github.com/chewielewis/</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
-  <Support>https://github.com/yourusername/tinynote/issues</Support>
-  <Project>https://github.com/yourusername/tinynote</Project>
+  <Support>https://github.com/chewielewis/tinynote/issues</Support>
+  <Project>https://github.com/chewielewis/tinynote</Project>
   <Overview>TinyNote is a web-based thermal printer service for Epson TM-T30 printers with AI-powered content generation. Uses OpenRouter/Claude for content creation and optional web search via Perplexity models.</Overview>
   <Category>Productivity: Utilities:</Category>
   <WebUI>http://[IP]:[PORT:4444]/</WebUI>
-  <TemplateURL/>
-  <Icon>https://raw.githubusercontent.com/yourusername/tinynote/main/public/icon.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/chewielewis/tinynote/main/unraid-template.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/chewielewis/tinynote/main/public/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>
