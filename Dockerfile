@@ -83,6 +83,7 @@ ENV PORT=4444 \
     MIN_PRINT_INTERVAL_MS=3000 \
     SEARCH_TIMEOUT_MS=10000 \
     CACHE_TTL_MS=300000 \
+    DATA_DIR=/app/data \
     PROMPTS_FILE=/app/data/prompts.json
 
 # Make entrypoint script executable

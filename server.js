@@ -31,7 +31,8 @@ const printer = new TinyNote(PRINTER_IP, PRINTER_PORT);
 let lastPrintTime = 0;
 
 // Prompt queue file (use /app/data for persistence in Docker)
-const PROMPTS_FILE = process.env.PROMPTS_FILE || path.join(__dirname, 'prompts.json');
+const DATA_DIR = process.env.DATA_DIR || '/app/data';
+const PROMPTS_FILE = process.env.PROMPTS_FILE || path.join(DATA_DIR, 'prompts.json');
 
 // Initialize prompts file if it doesn't exist (with error handling)
 if (!fs.existsSync(PROMPTS_FILE)) {
