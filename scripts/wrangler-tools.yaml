@@ -1,0 +1,49 @@
+# TinyNote tool registry entries
+# Paste into ~/Code/sprite/config/mcp-tools.yaml when the Wrangler router is built.
+#
+# These use the http: handler type (not yet in v0 python:-only router).
+# When http: handlers land, the router POSTs to the url with the arguments as JSON body.
+# Until then, add a python: wrapper in sprite_mcp_tools.py that calls httpx.post().
+#
+# Prerequisite: TinyNote server running at TINYNOTE_URL (default: http://localhost:4444)
+
+  tinynote.print:
+    description: Print plain text directly to the thermal printer (Epson TM-T30).
+    handler: http:http://localhost:4444/print
+    risk_tier: reversible_write
+    requires_confirmation: false
+    timeout_seconds: 15
+    enabled: true
+    input_schema:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          description: Text to print. Plain text, under 15 lines, ~32 chars wide.
+        align:
+          type: string
+          enum: [left, center, right]
+          default: left
+
+  tinynote.prompt:
+    description: >
+      Generate AI content and print it. TinyNote auto-detects whether web search
+      is needed (news, prices, weather), calls Perplexity if so, then generates
+      and prints printer-friendly output.
+    handler: http:http://localhost:4444/prompt
+    risk_tier: reversible_write
+    requires_confirmation: false
+    timeout_seconds: 60
+    enabled: true
+    input_schema:
+      type: object
+      required: [prompt]
+      properties:
+        prompt:
+          type: string
+          description: What to generate and print.
+        align:
+          type: string
+          enum: [left, center, right]
+          default: left
