@@ -3,7 +3,7 @@
  * Used by Docker HEALTHCHECK directive to verify server is running
  */
 
-const http = require('http');
+import http from 'http';
 
 const options = {
   host: 'localhost',
